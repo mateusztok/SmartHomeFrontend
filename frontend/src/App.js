@@ -6,6 +6,7 @@ import EnergyConsumption from './pages/EnergyConsumption/EnergyConsumption';
 import EnergyProduction from './pages/EnergyProduction/EnergyProduction';
 import Settings from './pages/Settings/Settings';
 import Control from './pages/Control/Control';
+import Chart from './pages/Chart/Chart';
 import './App.css';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
           <Route path="/energy-production" element={<EnergyProduction />} /> 
           <Route path="/settings" element={<Settings />} /> 
           <Route path="/control" element={<Control />} />  
+          <Route path="/chart" element={<Chart />} />  
         </Route>
       </Routes>
     </Router>
