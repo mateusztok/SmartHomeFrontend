@@ -1,1 +1,1 @@
-# SmartHome_frontend
+# SmartHomeFrontend

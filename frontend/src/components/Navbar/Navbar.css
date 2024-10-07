@@ -1,0 +1,26 @@
+.navbar {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  .navbar a {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #000;
+    font-weight: bold;
+    font-size:larger;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .navbar a:first-child {
+    border-top: 1px solid #ccc;
+ }
+  
+  .navbar a:hover {
+    background-color: #e0e0e0; 
+  }
+
