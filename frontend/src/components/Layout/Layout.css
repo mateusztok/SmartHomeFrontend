@@ -1,0 +1,27 @@
+body {
+    display: flex;
+    justify-content: center; 
+    align-items: center;     
+    height: 100vh;           
+    margin: 0;               
+  }
+
+.layout-container {
+    display: flex;
+    border: 1px solid black;
+    width: 90vw;    /* Can set to 100 in future */
+    height: 90vh;    /* Can set to 100 in future */
+  }
+  
+  .navbar-container {
+    width: 25%;  
+    background-color: #f0f0f0;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  
+  .content-container {
+    width: 75%;  
+    box-sizing: border-box;
+  }
+  

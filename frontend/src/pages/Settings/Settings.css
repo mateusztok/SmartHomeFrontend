@@ -1,0 +1,20 @@
+.settings-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+  }
+  
+  .setting-item {
+    margin-bottom: 15px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+  }
+  

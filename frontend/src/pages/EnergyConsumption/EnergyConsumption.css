@@ -1,0 +1,29 @@
+.energy-consumption-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .energy-consumption-row {
+    flex: 1;
+    display: flex;
+  }
+
+  .sensor-item {
+        flex: 1; 
+        display: flex;
+        flex-direction: column; 
+        align-items: center;
+        justify-content:center; 
+        border: 1px solid #ccc;
+        padding: 10px;
+        box-sizing: border-box; 
+}
+
+.measurement-name{
+    font-size:xx-large;
+}
+
+.sensor-value {
+    font-size:xx-large; 
+}
