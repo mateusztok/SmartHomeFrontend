@@ -1,63 +1,71 @@
 import React, { useEffect, useState } from 'react';
 import './Environment.css';
-import fetchFieldsDictionary from '../../components/Fetch/Fetch';
 import { useNavigate } from 'react-router-dom';
+import { useOutletContext } from 'react-router-dom';
 
 function Environment() {
-  const [data, setData] = useState(null);
+  const { sensorData } = useOutletContext(); // Pobieramy sensorData
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-
+  
   useEffect(() => {
-    const getData = async () => {
-      const result = await fetchFieldsDictionary();
-      setData(result);
-      setLoading(false);
-    };
-
-    getData();
-  }, []);
+    if (sensorData) {
+      setLoading(false); // Ustawiamy loading na false, gdy sensorData jest dostępne
+    }
+  }, [sensorData]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>Loading...</div>; // Komunikat podczas ładowania
   }
 
-  const handleSensorClick = (measurementType) => {
-    const chartData = {
-      labels: ['10:00', '11:00', '12:00'],  
-      datasets: [
-        {
-          label: 'Measurement',  
-          data: [22, 23, 24], 
-          fill: false,
-          borderColor: 'rgba(75,192,192,1)',  
-        },
-      ],
-    };
-
-    navigate('/chart', { state: { chartData } });
+  const handleSensorClick = async (measurementType) => {
+    try {
+      const response = await fetch(`http://localhost:8000/api/historical/type/${measurementType}/`);
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
+      }
+  
+      const data = await response.json();
+      
+      const chartData = {
+        labels: data.map(entry => entry.timestamp),  
+        datasets: [
+          {
+            label: 'Measurement',
+            data: data.map(entry => entry.value), 
+            fill: false,
+            borderColor: 'rgba(75,192,192,1)',
+          },
+        ],
+      };
+  
+      navigate('/chart', { state: { chartData } });
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
   };
-
+  
   return (
     <div className="environment-container">
       <div className='environment-row'>
-        <div className='sensor-item' onClick={() => handleSensorClick('temperature')}>
+        <div className='sensor-item' onClick={() => handleSensorClick('T')}>
           <div className='measurement-name'>Temperature</div>
-          <div className='sensor-value'>{data?.environment?.temperature_data ?? '-'}</div>
+          <div className='sensor-value'>{sensorData?.environment?.temperature_data?.value ?? '-'}</div>
         </div>
-        <div className='sensor-item' onClick={() => handleSensorClick('pressure')}>
+        <div className='sensor-item' onClick={() => handleSensorClick('P')}>
           <div className='measurement-name'>Pressure</div>
-          <div className='sensor-value'>{data?.environment?.pressure_data ?? '-'}</div>
+          <div className='sensor-value'>{sensorData?.environment?.pressure_data?.value ?? '-'}</div>
         </div>
       </div>
       <div className='environment-row'>
-        <div className='sensor-item' onClick={() => handleSensorClick('humidity')}>
+        <div className='sensor-item' onClick={() => handleSensorClick('H')}>
           <div className='measurement-name'>Humidity</div>
-          <div className='sensor-value'>{data?.environment?.humidity_data ?? '-'}</div>
+          <div className='sensor-value'>{sensorData?.environment?.humidity_data?.value ?? '-'}</div>
         </div>
-        <div className='sensor-item' onClick={() => handleSensorClick('light')}>
-          <div className='measurement-name'>Light Intensity</div>
-          <div className='sensor-value'>{data?.environment?.intensity_sensor_data ?? '-'}</div>
+        <div className='sensor-item' onClick={() => handleSensorClick('G')}>
+          <div className='measurement-name'>Gas</div>
+          <div className='sensor-value'>{sensorData?.environment?.gas_data?.value ?? '-'}</div>
         </div>
       </div>
     </div>
