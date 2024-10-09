@@ -5,14 +5,33 @@
     box-sizing: border-box;
   }
 
+  .security-container{
+    display: flex;
+  }
+
   .home-header{
     display: flex;
     justify-content: center;
     width: 100%;
   }
   
+  .alert {
+    animation: flash 1s infinite;
+  }
   
-  .security-container {
+  @keyframes flash {
+    0% { background-color: red; }
+    50% { background-color: white; }
+    100% { background-color: red; }
+  }
+
+  .time-display {
+    font-size: 1.5em;
+    margin: 20px 0;
+    text-align: center;
+  }
+  
+  .security-table-container {
     display: flex;
     flex-direction: column;
     width: 50%;    
@@ -21,7 +40,7 @@
     margin: 2% ;
   }
   
-  .security-container div {
+  .security-table-container div {
     flex: 1;
     display: flex;
     align-items: center;
