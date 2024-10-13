@@ -29,30 +29,31 @@ function Home() {
 
   const checkAlerts = (data) => {
     const alerts = [];
-    
-    if (data.security.tilt_sensor_status > thresholds.tilt_sensor) {
-      alerts.push('tilt_sensor');
+
+    if (data.security.tilt_sensor_status.alarm_on === true) {
+        alerts.push('tilt_sensor');
     }
-    if (data.security.pir_sensor_1_status > thresholds.pir_sensor_1) {
-      alerts.push('pir_sensor_1');
+    if (data.security.pir_sensor_1_status.alarm_on === true) {
+        alerts.push('pir_sensor_1');
     }
-    if (data.security.pir_sensor_2_status > thresholds.pir_sensor_2) {
-      alerts.push('pir_sensor_2');
+    if (data.security.pir_sensor_2_status.alarm_on === true) {
+        alerts.push('pir_sensor_2');
     }
-    if (data.security.radiation_sensitive_status > thresholds.radiation_sensitive) {
-      alerts.push('radiation_sensitive');
+    if (data.security.radiation_sensitive_status.alarm_on === true) {
+        alerts.push('radiation_sensitive');
     }
-    if (data.security.flame_sensor_status > thresholds.flame_sensor) {
-      alerts.push('flame_sensor');
+    if (data.security.flame_sensor_status.alarm_on === true) {
+        alerts.push('flame_sensor');
     }
 
     setAlertedSensors(alerts);
-  };
+};
+
   const handleAlarmToggle = async () => {
     const newStatus = sensorData.security.IsAlarmOn ? 0 : 1;
   
     try {
-      const responseVertical = await fetch('http://localhost:8000/api/control/changeAlarmStatus/', { // change url address when it exists
+      const responseVertical = await fetch('http://localhost:8000/api/settings/set-armed-alarm/', { // change url address when it exists
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -65,7 +66,7 @@ function Home() {
 const handleBuzzerToggle = async () => {
 
   try {
-    const responseVertical = await fetch('http://localhost:8000/api/control/turnOffBuzzer/', { // change url address when it exists
+    const responseVertical = await fetch('http://localhost:8000/api/security/buzzer/', { // change url address when it exists
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -90,31 +91,31 @@ catch{}
         <div className='security-row'>
           <div className={`sensor-item ${alertedSensors.includes('radiation_sensitive') ? 'alert' : ''}`}>{/* set to alert when the status is appropriate, for each below */}
             <div className='measurement-name'>Radiation Sensitive Sensor</div>
-            <div className='sensor-value'>{sensorData.security.radiation_sensitive_status}</div>
+            <div className='sensor-value'>{sensorData.security.radiation_sensitive_status.value}</div>
           </div>
           <div className={`sensor-item ${alertedSensors.includes('flame_sensor') ? 'alert' : ''}`}>
             <div className='measurement-name'>Flame Sensor</div>
-            <div className='sensor-value'>{sensorData.security.flame_sensor_status}</div>
+            <div className='sensor-value'>{sensorData.security.flame_sensor_status.value}</div>
           </div>
         </div>
         <div className='security-row'>
           <div className={`sensor-item ${alertedSensors.includes('pir_sensor_1') ? 'alert' : ''}`}>
             <div className='measurement-name'>PIR Sensor 1</div>
-            <div className='sensor-value'>{sensorData.security.pir_sensor_1_status}</div>
+            <div className='sensor-value'>{sensorData.security.pir_sensor_1_status.value}</div>
           </div>
           <div className={`sensor-item ${alertedSensors.includes('pir_sensor_2') ? 'alert' : ''}`}>
             <div className='measurement-name'>PIR Sensor 2</div>
-            <div className='sensor-value'>{sensorData.security.pir_sensor_2_status}</div>
+            <div className='sensor-value'>{sensorData.security.pir_sensor_2_status.value}</div>
           </div>
         </div>
         <div className='security-row'>
           <div className={`sensor-item ${alertedSensors.includes('tilt_sensor') ? 'alert' : ''}`}>
             <div className='measurement-name'>Tilt Sensor</div>
-            <div className='sensor-value'>{sensorData.security.tilt_sensor_status}</div>
+            <div className='sensor-value'>{sensorData.security.tilt_sensor_status.value}</div>
           </div>
           <div className='sensor-item'>
             <div className='measurement-name'>Buzzer</div>
-            <div className='sensor-value'>{sensorData.security.buzzer_control_status}</div>
+            <div className='sensor-value'>{sensorData.security.buzzer_control_status.value}</div>
           </div>
         </div>
       </div>

@@ -18,42 +18,48 @@ function Layout() {
       const alerts = [];
       setSensorData(data); 
 
-      if (data.security.tilt_sensor_status > thresholds.tilt_sensor) {
-        alerts.push('Tilt sensor value exceeded the limit!');
-      }
-      if (data.security.pir_sensor_1_status > thresholds.pir_sensor_1) {
-        alerts.push('PIR sensor 1 value exceeded the limit!');
-      }
-      if (data.security.pir_sensor_2_status > thresholds.pir_sensor_2) {
-        alerts.push('PIR sensor 2 value exceeded the limit!');
-      }
-      if (data.security.radiation_sensitive_status > thresholds.radiation_sensitive) {
-        alerts.push('Radiation sensitive sensor value exceeded the limit!');
-      }
-      if (data.security.flame_sensor_status > thresholds.flame_sensor) {
-        alerts.push('Flame sensor value exceeded the limit!');
-      }
-      if (data.environment.temperature_data.value > thresholds.temperature) {
-        alerts.push('Temperature exceeded the limit!');
-      }
-      if (data.environment.humidity_data.value > thresholds.humidity) {
-        alerts.push('Humidity exceeded the limit!');
-      }
-      if (data.environment.pressure_data.value > thresholds.pressure) {
-        alerts.push('Pressure exceeded the limit!');
-      }
-      if (data.environment.gas_data.value > thresholds.gas) {
-        alerts.push('Gas sensor value exceeded the limit!');
-      }
-      if (data.energy.intensity_sensor_data > thresholds.intensity_sensor) {
-        alerts.push('Intensity sensor value exceeded the limit!');
-      }
+    // Sprawdzamy, czy właściwości istnieją, zanim uzyskamy do nich dostęp
+    if (data.security?.tilt_sensor_status > thresholds.tilt_sensor) {
+      alerts.push('Tilt sensor value exceeded the limit!');
+    }
+    if (data.security?.pir_sensor_1_status > thresholds.pir_sensor_1) {
+      alerts.push('PIR sensor 1 value exceeded the limit!');
+    }
+    if (data.security?.pir_sensor_2_status > thresholds.pir_sensor_2) {
+      alerts.push('PIR sensor 2 value exceeded the limit!');
+    }
+    if (data.security?.radiation_sensitive_status > thresholds.radiation_sensitive) {
+      alerts.push('Radiation sensitive sensor value exceeded the limit!');
+    }
+    if (data.security?.flame_sensor_status > thresholds.flame_sensor) {
+      alerts.push('Flame sensor value exceeded the limit!');
+    }
+
+    if (data.environment?.temperature_data?.value > thresholds.temperature) {
+      alerts.push('Temperature exceeded the limit!');
+    }
+    if (data.environment?.humidity_data?.value > thresholds.humidity) {
+      alerts.push('Humidity exceeded the limit!');
+    }
+    if (data.environment?.pressure_data?.value > thresholds.pressure) {
+      alerts.push('Pressure exceeded the limit!');
+    }
+    if (data.environment?.gas_data?.value > thresholds.gas) {
+      alerts.push('Gas sensor value exceeded the limit!');
+    }
+
+    if (data.energy?.intensity_sensor_data > thresholds.intensity_sensor) {
+      alerts.push('Intensity sensor value exceeded the limit!');
+    }
 
       if (alerts.length > 0) {
         navigate('/');
       }
+      console.log("location.pathname");
+      console.log(location.pathname);
       if(location.pathname !== '/settings'){
-      setOutletKey(prevKey => prevKey + 1);}
+        // setOutletKey(prevKey => prevKey + 1);
+    }
     }
   };
 
