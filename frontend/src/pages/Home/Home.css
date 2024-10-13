@@ -13,6 +13,10 @@
     display: flex;
     justify-content: center;
     width: 100%;
+    font-size: 1vw;
+    font-size: 3vh;
+    font-size: 1vw;
+
   }
   
   .alert {
