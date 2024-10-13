@@ -23,20 +23,20 @@ function Control() {
     6: 0,
   });
 
-  const [gateStatus, setGateStatus] = useState('is close');
-  const [doorStatus, setDoorStatus] = useState('is close');
-  const [solarPanelStatus, setSolarPanelStatus] = useState('is close');
+  const [gateStatus, setGateStatus] = useState(0);
+  const [doorStatus, setDoorStatus] = useState(0);
+  const [isSolarInSafePosition, setIsSolarInSafePosition] = useState('is in safe position');
   const [clickedLed, setClickedLed] = useState(null);
   const [clickedFan, setClickedFan] = useState(null);
   const [pendingUpdate, setPendingUpdate] = useState(null);
 
   useEffect(() => {
     if (sensorData) {
-      if (sensorData && sensorData.energy && sensorData.energy.leds) {
+      if (sensorData?.energy?.leds) {
         setLeds(sensorData.energy.leds);
       }
       
-      if (sensorData && sensorData.control) {
+      if (sensorData?.control) {
         const fan1Status = sensorData.control.fan_1_control_status;
         const fan2Status = sensorData.control.fan_2_control_status;
         setFans({
@@ -45,40 +45,36 @@ function Control() {
         });
 
     }
-    setGateStatus(sensorData.control.gate_control === 0 ? 'is close' : 'is open');
-    setDoorStatus(sensorData.control.door_servo_control === 0 ? 'is close' : 'is open');
-    setSolarPanelStatus(sensorData.control.servo_horizontal_control === 0 && sensorData.control.servo_vertical_control === 0 ? 'is close' : 'is open');
+    setGateStatus(sensorData.control.gate_control);
+    setDoorStatus(sensorData.control.door_servo_control);
+    setIsSolarInSafePosition(sensorData.control.is_solar_in_safe_position);
   }
 }, [sensorData]);
 
   const handleSolarPanelClick = async () => {
-    const { vertical, horizontal } = solarPanelStatus;
-  
-    const newVerticalStatus = vertical === 0 ? 90 : 0;
-    const newHorizontalStatus = horizontal === 0 ? 90 : 0;
-  
+    let newStatus;
+    if (isSolarInSafePosition === 0) {
+      newStatus = 1;
+    } else if (isSolarInSafePosition === 1) {
+      newStatus = 0;
+    } else {
+      console.error(`Invalid status. Expected 0 or 1, got:`, isSolarInSafePosition);
+      return;  
+    }
     try {
       const responseVertical = await fetch('http://localhost:8000/api/control/servo-vertical/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ value: newVerticalStatus }),
+        body: JSON.stringify({ value: newStatus  }),
       });
   
-      const responseHorizontal = await fetch('http://localhost:8000/api/control/servo-horizontal/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ value: newHorizontalStatus }),
-      });
-  
-      if (!responseVertical.ok || !responseHorizontal.ok) {
+      if (!responseVertical.ok) {
         throw new Error('Failed to update solar panel status');
       }
   
-      setSolarPanelStatus({ vertical: newVerticalStatus, horizontal: newHorizontalStatus });
+      setIsSolarInSafePosition( 2 );
 
     } catch (error) {
       console.error('Error updating solar panel:', error);
@@ -159,7 +155,7 @@ function Control() {
 
       setFans((prevFans) => ({
         ...prevFans,
-        [fanNumber]: newStatus,
+        [fanNumber]: 2,
       }));
 
       
@@ -176,8 +172,14 @@ function Control() {
       'door-servo': doorStatus,
     };
 
-    newStatus = controlMap[controlType] === 0 ? 90 : 0; 
-
+    if (controlMap[controlType] === 0) {
+      newStatus = 1;
+    } else if (controlMap[controlType] === 1) {
+      newStatus = 0;
+    } else {
+      console.error(`Invalid status for ${controlType}. Expected 0 or 1, got:`, controlMap[controlType]);
+      return;  
+    }
     try {
       const response = await fetch(`http://localhost:8000/api/control/${controlType}/`, {
         method: 'POST',
@@ -192,9 +194,9 @@ function Control() {
       }
      
       if (controlType === 'gate') {
-        setGateStatus(newStatus);
+        setGateStatus(2);
       } else if (controlType === 'door-servo') {
-        setDoorStatus(newStatus);
+        setDoorStatus(2);
       }
     } catch (error) {
       console.error(`Error updating ${controlType}:`, error);
@@ -202,10 +204,14 @@ function Control() {
   };
 
   const getBulbStyle = (led, ledNumber) => {
+    if (!led) {
+      return { backgroundColor: 'white' };
+  }
     const { red, green, blue } = led;
     const isClicked = clickedLed === ledNumber;
     const isPending = pendingUpdate === ledNumber;
 
+    
     if (isPending) {
       return {
         backgroundColor: red === 0 && green === 0 && blue === 0 ? 'yellow' : 'white',
@@ -223,18 +229,26 @@ function Control() {
   };
 
   const getFanStyle = (fanStatus) => {
-    return fanStatus !== 0 ? { animation: 'rotateFan 2s linear infinite' } : {};
+    if(fanStatus === 1) return { animation: 'rotateFan 2s linear infinite' };
+    if(fanStatus === 0) return {};
+    return;
   };
 
-  const getDoorGateButtonLabel = (status) => (status === 0 ? 'is close' : 'is open');
+  const getDoorGateButtonLabel = (status) => {
+  if(status === 0) return'is close';
+  if(status ===1) return 'is open';
+  return 'in progress';
+  }
 
-  const getSolarPanelButtonLabel = ({ vertical, horizontal }) => {
-    if (vertical === 0 && horizontal === 0) {
-      return 'is close';
-    } else {
-      return 'is open';
-    }
-  };
+  const getSolarPanelButtonLabel = (isSolarInSafePosition) => {
+  if (isSolarInSafePosition === 0) {
+    return 'is following the sun';
+  }
+  if (isSolarInSafePosition === 2) {
+    return 'in progress';
+  }
+  return 'is in safe position';
+};
   
   return (
     <div className='control-container'>
@@ -297,7 +311,7 @@ function Control() {
         Door: {getDoorGateButtonLabel(doorStatus)}
       </button>
       <button className='control-button' onClick={handleSolarPanelClick}>
-        Solar panel: {getSolarPanelButtonLabel(solarPanelStatus)}
+        Solar panel: {getSolarPanelButtonLabel(isSolarInSafePosition)}
       </button>
       </div>
     </div>

@@ -38,21 +38,21 @@ function EnergyConsumption() {
       <div className='energy-consumption-row'>
         <div className='sensor-item' onClick={() => handleSensorClick('current')}>
           <div className='measurement-name'>Current</div>
-          <div className='sensor-value'>{sensorData?.energy?.current_data ?? '-'}</div> 
+          <div className='sensor-value'>{sensorData?.energy?.energy_consumption?.current_data ?? '-'}</div> 
         </div>
         <div className='sensor-item' onClick={() => handleSensorClick('power')}>
           <div className='measurement-name'>Power</div>
-          <div className='sensor-value'>{sensorData?.energy?.power_data ?? '-'}</div>
+          <div className='sensor-value'>{sensorData?.energy?.energy_consumption?.power_data ?? '-'}</div>
         </div>
       </div>
       <div className='energy-consumption-row'>
         <div className='sensor-item' onClick={() => handleSensorClick('charge')}>
           <div className='measurement-name'>Supply</div>
-          <div className='sensor-value'>{sensorData?.energy?.supply_data ?? '-'}</div> 
+          <div className='sensor-value'>{sensorData?.energy?.energy_consumption?.supply_data ?? '-'}</div> 
         </div>
         <div className='sensor-item' onClick={() => handleSensorClick('consumed')}>
           <div className='measurement-name'>Bus</div>
-          <div className='sensor-value'>{sensorData?.energy?.bus_data ?? '-'}</div>
+          <div className='sensor-value'>{sensorData?.energy?.energy_consumption?.bus_data ?? '-'}</div>
         </div>
       </div>
     </div>
