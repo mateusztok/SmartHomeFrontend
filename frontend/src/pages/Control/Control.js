@@ -205,12 +205,11 @@ function Control() {
 
   const getBulbStyle = (led, ledNumber) => {
     if (!led) {
-      return { backgroundColor: 'white' }; // Fallback style for non-existing LED
-  }
+      return { backgroundColor: 'white' };
+    }
     const { red, green, blue } = led;
     const isClicked = clickedLed === ledNumber;
     const isPending = pendingUpdate === ledNumber;
-
     
     if (isPending) {
       return {

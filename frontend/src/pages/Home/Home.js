@@ -53,7 +53,7 @@ function Home() {
     const newStatus = sensorData.security.IsAlarmOn ? 0 : 1;
   
     try {
-      const responseVertical = await fetch('http://localhost:8000/api/settings/set-armed-alarm/', { // change url address when it exists
+      const responseVertical = await fetch('http://localhost:8000/api/settings/set-armed-alarm/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -66,7 +66,7 @@ function Home() {
 const handleBuzzerToggle = async () => {
 
   try {
-    const responseVertical = await fetch('http://localhost:8000/api/security/buzzer/', { // change url address when it exists
+    const responseVertical = await fetch('http://localhost:8000/api/security/buzzer/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

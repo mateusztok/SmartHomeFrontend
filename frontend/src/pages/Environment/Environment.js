@@ -4,18 +4,18 @@ import { useNavigate } from 'react-router-dom';
 import { useOutletContext } from 'react-router-dom';
 
 function Environment() {
-  const { sensorData } = useOutletContext(); // Pobieramy sensorData
+  const { sensorData } = useOutletContext();
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   
   useEffect(() => {
     if (sensorData) {
-      setLoading(false); // Ustawiamy loading na false, gdy sensorData jest dostępne
+      setLoading(false); 
     }
   }, [sensorData]);
 
   if (loading) {
-    return <div>Loading...</div>; // Komunikat podczas ładowania
+    return <div>Loading...</div>;
   }
 
   const handleSensorClick = async (measurementType) => {

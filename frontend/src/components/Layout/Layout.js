@@ -18,7 +18,6 @@ function Layout() {
       const alerts = [];
       setSensorData(data); 
 
-    // Sprawdzamy, czy właściwości istnieją, zanim uzyskamy do nich dostęp
     if (data.security?.tilt_sensor_status > thresholds.tilt_sensor) {
       alerts.push('Tilt sensor value exceeded the limit!');
     }
@@ -55,10 +54,8 @@ function Layout() {
       if (alerts.length > 0) {
         navigate('/');
       }
-      console.log("location.pathname");
-      console.log(location.pathname);
       if(location.pathname !== '/settings'){
-        // setOutletKey(prevKey => prevKey + 1);
+        setOutletKey(prevKey => prevKey + 1);
     }
     }
   };
@@ -67,7 +64,7 @@ function Layout() {
     checkSensorValues(); 
     const interval = setInterval(checkSensorValues, 5000); 
     return () => clearInterval(interval);
-  }, []);
+  }, [location]); 
   
 
   return (

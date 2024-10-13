@@ -62,10 +62,9 @@ function Settings() {
     }
   };
 
-  // Function to add a new RFID
   const handleAddRFID = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/security/set-rfid/', { // change URL to the correct one
+      const response = await fetch('http://localhost:8000/api/security/set-rfid/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -89,7 +88,7 @@ function Settings() {
     }
 
     try {
-      const response = await fetch('http://localhost:8000/api/security/change-current-pin/', { // change URL to the correct one
+      const response = await fetch('http://localhost:8000/api/security/change-current-pin/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
