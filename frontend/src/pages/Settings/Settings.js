@@ -8,6 +8,7 @@ import fetchFieldsDictionary from '../../components/Fetch/Fetch';
 function Settings() {
   const [sensorData, setSensorData] = useState(null);
   const [lightValue, setLightValue] = useState('');
+  const [alarmValue, setAlarmValue] = useState('');
   const [newPin, setNewPin] = useState({ pin1: '', pin2: '', pin3: '' });
 
   useEffect(() => {
@@ -21,8 +22,19 @@ function Settings() {
     fetchData();
   }, []);
 
+  const fetchLatestData = async () => {
+    const data = await fetchFieldsDictionary();
+    if (data) {
+      setSensorData(data);
+    }
+  };
+
   const handleLightValueChange = (e) => {
     setLightValue(e.target.value);
+  };
+
+  const handleAlarmTimeValueChange = (e) => {
+    setAlarmValue(e.target.value);
   };
 
   const handlePinChange = (e) => {
@@ -32,15 +44,16 @@ function Settings() {
 
   const handleLightValueSubmit = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/control/turnOnLight/', { // change URL to the correct one
+      const response = await fetch('http://localhost:8000/api/settings/light-sensitivity/', { 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ lightValue: lightValue }), 
+        body: JSON.stringify({ value: lightValue }), 
       });
       if (response.ok) {
         console.log('Light value updated successfully');
+        fetchLatestData();
       } else {
         console.error('Failed to update light value');
       }
@@ -49,14 +62,14 @@ function Settings() {
     }
   };
 
-  // Function to add a new RFID
   const handleAddRFID = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/control/addRFID/', { // change URL to the correct one
+      const response = await fetch('http://localhost:8000/api/security/set-rfid/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify({ owner: "0" }), 
       });
       if (response.ok) {
         console.log('RFID added successfully');
@@ -75,15 +88,16 @@ function Settings() {
     }
 
     try {
-      const response = await fetch('http://localhost:8000/api/control/changePin/', { // change URL to the correct one
+      const response = await fetch('http://localhost:8000/api/security/change-current-pin/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ oldPin: newPin.pin3, newPin: newPin.pin1 }),
+        body: JSON.stringify({old_pin: newPin.pin3, new_pin: newPin.pin1 }),
       });
       if (response.ok) {
         console.log('Pin changed successfully');
+        fetchLatestData();
       } else {
         console.error('Failed to change pin');
       }
@@ -92,12 +106,32 @@ function Settings() {
     }
   };
 
+  const handleAlarmTimeValueSubmit = async () => {
+    try {
+      const response = await fetch('http://localhost:8000/api/settings/set-alarm/', { 
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ value: alarmValue }), 
+      });
+      if (response.ok) {
+        console.log('Light value updated successfully');
+        fetchLatestData();
+      } else {
+        console.error('Failed to update light value');
+      }
+    } catch (error) {
+      console.error('Error updating light value:', error);
+    }
+  };
+
   return (
     <div className="settings-container">
       <h1>Settings</h1>
       
       <div className="setting-item">
-        <label htmlFor="lightValue">Value to turn on the outdoor light: {sensorData?.energy?.lightsensitivity}</label>
+        <label htmlFor="lightValue">Value to turn on the outdoor light: {sensorData?.settings?.light_sensor_sensitivity}</label>
         <input 
           type="number" 
           id="lightValue" 
@@ -106,6 +140,18 @@ function Settings() {
           onChange={handleLightValueChange} 
         />
         <button onClick={handleLightValueSubmit}>Submit</button>
+      </div>
+
+      <div className="setting-item">
+        <label htmlFor="alarmValue">Change alarm time: {sensorData?.settings?.alarm_time}</label>
+        <input 
+          type="number" 
+          id="alarmValue" 
+          placeholder="Enter value" 
+          value={alarmValue} 
+          onChange={handleAlarmTimeValueChange} 
+        />
+        <button onClick={handleAlarmTimeValueSubmit}>Submit</button>
       </div>
 
       <div className="setting-item">
