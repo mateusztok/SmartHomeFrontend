@@ -14,10 +14,6 @@ function Environment() {
     }
   }, [sensorData]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
   const handleSensorClick = async (measurementType) => {
     try {
       const response = await fetch(`http://localhost:8000/api/historical/type/${measurementType}/`);
@@ -38,7 +34,7 @@ function Environment() {
                 borderColor: 'rgba(75,192,192,1)',
             },
         ],
-    };
+      };
   
       navigate('/chart', { state: { chartData } });
     } catch (error) {

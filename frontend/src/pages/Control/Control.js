@@ -46,7 +46,7 @@ function Control() {
 
     }
     setGateStatus(sensorData.control.gate_control);
-    setDoorStatus(sensorData.control.door_servo_control);
+    setDoorStatus(sensorData.control.door_control);
     setIsSolarInSafePosition(sensorData.control.is_solar_in_safe_position);
   }
 }, [sensorData]);
@@ -62,7 +62,7 @@ function Control() {
       return;  
     }
     try {
-      const responseVertical = await fetch('http://localhost:8000/api/control/servo-vertical/', {
+      const responseVertical = await fetch('http://localhost:8000/api/control/solar-position/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
