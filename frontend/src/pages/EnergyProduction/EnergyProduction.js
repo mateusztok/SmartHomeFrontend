@@ -13,46 +13,26 @@ function EnergyProduction() {
     }
   }, [sensorData]);
 
-  if (loading) {
-    return <div>Loading...</div>; 
-  }
-
-  const handleSensorClick = (measurementType) => {
-    const chartData = {
-      labels: ['10:00', '11:00', '12:00'],  
-      datasets: [
-        {
-          label: 'Manufactured Energy',  
-          data: [5, 10, 15],  
-          fill: false,
-          borderColor: 'rgba(75,192,192,1)',  
-        },
-      ],
-    };
-
-    // navigate('/chart', { state: { chartData } });
-  };
-
   return (
     <div className="energy-production-container">
       <div className='energy-production-row'>
-        <div className='sensor-item' onClick={() => handleSensorClick('current')}>
+        <div className='sensor-item'>
           <div className='measurement-name'>Current</div>
-          <div className='sensor-value'>{sensorData?.energy?.energy_production?.current_data ?? '-'}</div>
+          <div className='sensor-value'>{sensorData?.energy?.energy_production?.current_data?.value ?? '-'}</div>
         </div>
-        <div className='sensor-item' onClick={() => handleSensorClick('power')}>
+        <div className='sensor-item' >
           <div className='measurement-name'>Power</div>
-          <div className='sensor-value'>{sensorData?.energy?.energy_production?.power_data ?? '-'}</div>
+          <div className='sensor-value'>{sensorData?.energy?.energy_production?.power_data?.value ?? '-'}</div>
         </div>
       </div>
       <div className='energy-production-row'>
-        <div className='sensor-item' onClick={() => handleSensorClick('charge')}>
-          <div className='measurement-name'>Charge</div>
-          <div className='sensor-value'>{sensorData?.energy?.energy_production?.charge_data ?? '-'}</div> 
+        <div className='sensor-item' >
+          <div className='measurement-name'>Supply</div>
+          <div className='sensor-value'>{sensorData?.energy?.energy_production?.supply_data?.value ?? '-'}</div> 
         </div>
-        <div className='sensor-item' onClick={() => handleSensorClick('manufactured')}>
-          <div className='measurement-name'>Manufactured Energy</div>
-          <div className='sensor-value'>{sensorData?.energy?.energy_production?.manufactured_energy_data ?? '-'}</div> 
+        <div className='sensor-item' >
+          <div className='measurement-name'>Bus</div>
+          <div className='sensor-value'>{sensorData?.energy?.energy_production?.bus_data?.value ?? '-'}</div> 
         </div>
       </div>
     </div>
