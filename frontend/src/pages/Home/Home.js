@@ -45,7 +45,7 @@ function Home() {
   };
 
   const handleAlarmToggle = async () => {
-    const newStatus = sensorData.security?.is_alarm_armed  ? 0 : 1;
+    const newStatus = sensorData.security?.IsAlarmOn ? 0 : 1;
   
     try {
       await fetch('http://localhost:8000/api/settings/set-armed-alarm/', {
@@ -70,61 +70,75 @@ function Home() {
   };
 
   return (
-    <div className="home-container">
-      <div className='home-header'><h1>Your SmartHome</h1></div>
-      <div className='time-display'>{currentTime}</div>
-      <div className='security-container'>
-        <div className='security-table-container'>
-          <div className='sensor-row'>
-            <div className='sensor-item'>Security</div>
+      <div className="home-container">
+        <div className='home-header'><h1>Your SmartHome</h1></div>
+        <div className='time-display'>{currentTime}</div>
+        <div className='security-container'>
+          <div className='security-table-container'>
+            <div className='sensor-row'>
+              <div className='sensor-item'>Security</div>
+            </div>
+            <div className='security-row'>
+              <div className={`sensor-item ${alertedSensors.includes('radiation_sensitive') ? 'alert' : ''}`}>
+                <div className='measurement-name'>Radiation Sensitive Sensor</div>
+                <div className='sensor-value'>
+                  {sensorData?.security?.radiation_sensitive_status?.value || '-'}
+                </div>
+              </div>
+              <div className={`sensor-item ${alertedSensors.includes('flame_sensor') ? 'alert' : ''}`}>
+                <div className='measurement-name'>Flame Sensor</div>
+                <div className='sensor-value'>
+                  {sensorData?.security?.flame_sensor_status?.value || '-'}
+                </div>
+              </div>
+            </div>
+            <div className='security-row'>
+              <div className={`sensor-item ${alertedSensors.includes('pir_sensor_1') ? 'alert' : ''}`}>
+                <div className='measurement-name'>PIR Sensor 1</div>
+                <div className='sensor-value'>
+                  {sensorData?.security?.pir_sensor_1_status?.value || '-'}
+                </div>
+              </div>
+              <div className={`sensor-item ${alertedSensors.includes('pir_sensor_2') ? 'alert' : ''}`}>
+                <div className='measurement-name'>PIR Sensor 2</div>
+                <div className='sensor-value'>
+                  {sensorData?.security?.pir_sensor_2_status?.value || '-'}
+                </div>
+              </div>
+            </div>
+            <div className='security-row'>
+              <div className={`sensor-item ${alertedSensors.includes('tilt_sensor') ? 'alert' : ''}`}>
+                <div className='measurement-name'>Tilt Sensor</div>
+                <div className='sensor-value'>
+                  {sensorData?.security?.tilt_sensor_status?.value || '-'}
+                </div>
+              </div>
+              <div className='sensor-item'>
+                <div className='measurement-name'>Buzzer</div>
+                <div className='sensor-value'>
+                  {sensorData?.security?.buzzer_control_status?.value || '-'}
+                </div>
+              </div>
+            </div>
           </div>
-          <div className='security-row'>
-            <div className={`sensor-item ${alertedSensors.includes('radiation_sensitive') ? 'alert' : ''}`}>
-              <div className='measurement-name'>Radiation Sensitive Sensor</div>
-              <div className='sensor-value'>
-                {sensorData?.security?.radiation_sensitive_status?.value || '-'}
-              </div>
-            </div>
-            <div className={`sensor-item ${alertedSensors.includes('flame_sensor') ? 'alert' : ''}`}>
-              <div className='measurement-name'>Flame Sensor</div>
-              <div className='sensor-value'>
-                {sensorData?.security?.flame_sensor_status?.value || '-'}
-              </div>
-            </div>
-          </div>
-          <div className='security-row'>
-            <div className={`sensor-item ${alertedSensors.includes('pir_sensor_1') ? 'alert' : ''}`}>
-              <div className='measurement-name'>PIR Sensor 1</div>
-              <div className='sensor-value'>
-                {sensorData?.security?.pir_sensor_1_status?.value || '-'}
-              </div>
-            </div>
-            <div className={`sensor-item ${alertedSensors.includes('pir_sensor_2') ? 'alert' : ''}`}>
-              <div className='measurement-name'>PIR Sensor 2</div>
-              <div className='sensor-value'>
-                {sensorData?.security?.pir_sensor_2_status?.value || '-'}
-              </div>
-            </div>
-          </div>
-          <div className='security-row'>
-            <div className={`sensor-item ${alertedSensors.includes('tilt_sensor') ? 'alert' : ''}`}>
-              <div className='measurement-name'>Tilt Sensor</div>
-              <div className='sensor-value'>
-                {sensorData?.security?.tilt_sensor_status?.value || '-'}
-              </div>
-            </div>
-            <div className='sensor-item'>
-              <div className='measurement-name'>Buzzer</div>
-              <div className='sensor-value'>
-              {sensorData?.security?.buzzer_control_status?.value === true ? '1' : sensorData?.security?.buzzer_control_status?.value === false ? '-' : '-'}
- 
-              </div>
-            </div>
-          </div>
+          {/*Tu były pierwotnie przyciski*/}
+          {/*<div>*/}
+          {/*  <div className='alarm-container'>*/}
+          {/*    <div>Alarm Arming: {sensorData?.security?.IsAlarmOn ? 'On' : 'Off'}</div>*/}
+          {/*    <button className='control-button' onClick={handleAlarmToggle}>*/}
+          {/*      Change Status*/}
+          {/*    </button>*/}
+          {/*  </div>*/}
+          {/*  <div className='alarm-container'>*/}
+          {/*    <button className='control-button' onClick={handleBuzzerToggle}>*/}
+          {/*      Turn off buzzer*/}
+          {/*    </button>*/}
+          {/*  </div>*/}
+          {/*</div>*/}
         </div>
         <div>
           <div className='alarm-container'>
-            <div>Alarm Arming: {sensorData?.security?.is_alarm_armed ? 'On' : 'Off'}</div>
+            <div>Alarm Arming: {sensorData?.security?.IsAlarmOn ? 'On' : 'Off'}</div>
             <button className='control-button' onClick={handleAlarmToggle}>
               Change Status
             </button>
@@ -135,8 +149,8 @@ function Home() {
             </button>
           </div>
         </div>
+
       </div>
-    </div>
   );
 }
 
