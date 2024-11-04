@@ -41,8 +41,11 @@
     width: 50%;    
     height: 50%; 
     box-sizing: border-box;
-    margin: 2% ;
+    margin: auto;
+    margin-bottom: 40px;
+    /*border-radius: 10px ;*/
   }
+
   
   .security-table-container div {
     flex: 1;
@@ -68,4 +71,7 @@
     justify-content: center;
     border: 1px solid #ccc; 
   }
-  
+
+  .alarm-container {
+    text-align: center;
+  }
