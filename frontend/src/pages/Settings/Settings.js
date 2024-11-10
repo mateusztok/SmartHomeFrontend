@@ -42,7 +42,12 @@ function Settings() {
     setNewPin((prev) => ({ ...prev, [id]: value }));
   };
 
-  const handleLightValueSubmit = async () => {
+  const handleLightValueSubmit = async ()  => {
+    const topValue = 100, bottomValue = 0;
+    if (Number(lightValue) > topValue || Number(lightValue) < bottomValue) {
+      alert('light value must be between 0 and 100');
+      return;
+    }
     try {
       const response = await fetch('http://localhost:8000/api/settings/light-sensitivity/', { 
         method: 'POST',
@@ -82,11 +87,18 @@ function Settings() {
   };
 
   const handlePinSubmit = async () => {
-    if (newPin.pin1 !== newPin.pin2) {
-      console.error('New pins do not match');
+    if ((newPin.pin1 !== newPin.pin2) && (/^\d+$/.test(newPin.pin1) === false)){
+      alert('New pins do not match\n'+'Pins must consist of digits only');
       return;
     }
-
+    if (newPin.pin1 !== newPin.pin2) {
+      alert('New pins do not match');
+      return;
+    }
+    if (/^\d+$/.test(newPin.pin1) === false){
+      alert('Pins must consist of digits only');
+      return;
+    }
     try {
       const response = await fetch('http://localhost:8000/api/security/change-current-pin/', {
         method: 'POST',
@@ -135,7 +147,7 @@ function Settings() {
         <input 
           type="number" 
           id="lightValue" 
-          placeholder="Enter value" 
+          placeholder="Enter value (0-100)"
           value={lightValue} 
           onChange={handleLightValueChange} 
         />
@@ -147,8 +159,8 @@ function Settings() {
         <input 
           type="number" 
           id="alarmValue" 
-          placeholder="Enter value" 
-          value={alarmValue} 
+          placeholder="Enter value"
+          value={alarmValue}
           onChange={handleAlarmTimeValueChange} 
         />
         <button onClick={handleAlarmTimeValueSubmit}>Submit</button>
