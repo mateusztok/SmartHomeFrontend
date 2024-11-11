@@ -16,6 +16,7 @@ function Control() {
     4: { red: 0, green: 0, blue: 0 },
     5: { red: 0, green: 0, blue: 0 },
     6: { red: 0, green: 0, blue: 0 },
+    7: { red: 0, green: 0, blue: 0 },
   });
 
   const [fans, setFans] = useState({
@@ -212,7 +213,7 @@ function Control() {
     const isPending = pendingUpdate === ledNumber;
     
     if (isPending) {
-      return {
+       return {
         backgroundColor: red === 0 && green === 0 && blue === 0 ? 'yellow' : 'white',
       };
     }
@@ -254,59 +255,66 @@ function Control() {
       <div className="house-container">
         <div className="room" id="attic">
           <button
-            className="bulb-btn"
-            style={getBulbStyle(leds['1'], 1)}
-            onClick={() => handleBulbClick(1)}
+              className="bulb-btn"
+              style={getBulbStyle(leds['1'], 1)}
+              onClick={() => handleBulbClick(1)}
           ></button>
         </div>
-        <div className="room" id="room1">
+        <div className="room" id="left_bottom">
           <button
-            className="bulb-btn"
-            style={getBulbStyle(leds['2'], 2)}
-            onClick={() => handleBulbClick(2)}
+              className="bulb-btn"
+              style={getBulbStyle(leds['2'], 2)}
+              onClick={() => handleBulbClick(2)}
           ></button>
         </div>
-        <div className="room" id="room5">
+        <div className="room" id="left_top_fan">
           <button
-            className="fan-btn"
-            style={getFanStyle(fans['5'])}
-            onClick={() => handleFanClick(5)}
+              className="fan-btn"
+              style={getFanStyle(fans['5'])}
+              onClick={() => handleFanClick(5)}
           ></button>
         </div>
-        <div className="room" id="room6">
+        <div className="room" id="right_top_fan">
           <button
-            className="fan-btn"
-            style={getFanStyle(fans['6'])}
-            onClick={() => handleFanClick(6)}
+              className="fan-btn"
+              style={getFanStyle(fans['6'])}
+              onClick={() => handleFanClick(6)}
           ></button>
         </div>
-        <div className="room" id="room2">
+        <div className="room" id="right_top_bulb">
           <button
-            className="bulb-btn"
-            style={getBulbStyle(leds['3'], 3)}
-            onClick={() => handleBulbClick(3)}
+              className="bulb-btn"
+              style={getBulbStyle(leds['3'], 3)}
+              onClick={() => handleBulbClick(3)}
           ></button>
         </div>
-        <div className="room" id="room3">
+        <div className="room" id="left_top_bulb">
           <button
-            className="bulb-btn"
-            style={getBulbStyle(leds['4'], 4)}
-            onClick={() => handleBulbClick(4)}
+              className="bulb-btn"
+              style={getBulbStyle(leds['4'], 4)}
+              onClick={() => handleBulbClick(4)}
           ></button>
         </div>
-        <div className="room" id="room4">
+        <div className="room" id="right_bottom">
           <button
-            className="bulb-btn"
-            style={getBulbStyle(leds['5'], 5)}
-            onClick={() => handleBulbClick(5)}
+              className="bulb-btn"
+              style={getBulbStyle(leds['5'], 5)}
+              onClick={() => handleBulbClick(5)}
+          ></button>
+        </div>
+        <div className="room" id="outside">
+          <button
+              className="bulb-btn"
+              style={getBulbStyle(leds['5'], 7)}
+              onClick={() => handleBulbClick(7)}
           ></button>
         </div>
       </div>
       <div className='control-button-container'>
-      <button className='control-button' onClick={() => handleControlClick('gate')}>
-        Gate: {getDoorGateButtonLabel(gateStatus)}
-      </button>
-      <button className='control-button' onClick={() => handleControlClick('door-servo')}>
+        <button className='control-button' onClick={() => handleControlClick('gate')}>
+          Gate: {getDoorGateButtonLabel(gateStatus)}
+        </button>
+        <button className='control-button' onClick={() => handleControlClick('door-servo')}>
         Door: {getDoorGateButtonLabel(doorStatus)}
       </button>
       <button className='control-button' onClick={handleSolarPanelClick}>
