@@ -45,7 +45,7 @@ function Home() {
   };
 
   const handleAlarmToggle = async () => {
-    const newStatus = sensorData.security?.IsAlarmOn ? 0 : 1;
+    const newStatus = sensorData.security?.is_alarm_armed  ? 0 : 1;
   
     try {
       await fetch('http://localhost:8000/api/settings/set-armed-alarm/', {
@@ -116,14 +116,15 @@ function Home() {
             <div className='sensor-item'>
               <div className='measurement-name'>Buzzer</div>
               <div className='sensor-value'>
-                {sensorData?.security?.buzzer_control_status?.value || '-'}
+              {sensorData?.security?.buzzer_control_status?.value === true ? '1' : sensorData?.security?.buzzer_control_status?.value === false ? '-' : '-'}
+ 
               </div>
             </div>
           </div>
         </div>
         <div>
           <div className='alarm-container'>
-            <div>Alarm Arming: {sensorData?.security?.IsAlarmOn ? 'On' : 'Off'}</div>
+            <div>Alarm Arming: {sensorData?.security?.is_alarm_armed ? 'On' : 'Off'}</div>
             <button className='control-button' onClick={handleAlarmToggle}>
               Change Status
             </button>
