@@ -87,7 +87,7 @@ function Control() {
     if (led.red === 0 && led.green === 0 && led.blue === 0) {
       setClickedLed(ledNumber);
       setPendingUpdate(ledNumber);
-      const newRgb = { red: 255, green: 255, blue: 255 };
+      const newRgb = { red: 255, green: 255, blue: 0 };
       try {
         const response = await fetch(`http://localhost:8000/api/control/led/${ledNumber}/`, {
           method: 'POST',
